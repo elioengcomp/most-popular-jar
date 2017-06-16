@@ -36,7 +36,7 @@ public class Main {
         options.addOption("s", "size", true, "Ranking size");
         options.addOption("w", "workers", true, "Max number of concurrent workers");
         options.addOption("t", "threads", true, "Max number of concurrent threads per worker");
-        options.addOption("p", "page", true, "(Optional) Page size per worker");
+        options.addOption("p", "page", true, "Page size per worker");
         options.addOption("h", "help", false, "Print this message");
         return options;
     }

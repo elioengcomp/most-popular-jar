@@ -108,8 +108,9 @@ public class RestClient {
             }
 
             // Verify HTTP response code
-            if (conn.getResponseCode() < 200 && conn.getResponseCode() > 299) {
-                throw new RestClientException("Request failed with status: " + conn.getResponseCode());
+            int responseCode = conn.getResponseCode();
+            if (responseCode < 200 || responseCode > 299) {
+                throw new RestClientException(responseCode, "Request failed with status: " + responseCode);
             }
 
             // Read response
