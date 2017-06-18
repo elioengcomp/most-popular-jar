@@ -2,9 +2,9 @@
 
 Experiment to identify the behavior of the application to different execution arguments
 
-## Workload description
+## Workload Description
 
-The workload consists in search for the most popular jar file inside an Artifacotry repository containing 1087 items out of which 505 are Jar files.
+The experimental workload consists in searching for the most popular jar file inside an Artifacotry repository containing 1087 items out of which 505 are Jar files.
 
 ## Execution scenarios
 
@@ -35,7 +35,7 @@ Each scenario is executed 5 times.
 
 To run the experiment execute the class `marcolino.elio.mpj.PerformanceExperiment`
 
-The results are automatically save at `<USER_FOLDER>/mpj-experiment/`
+The results are automatically saved at `<USER_FOLDER>/mpj-experiment/`
 
 ## Results
 
@@ -51,7 +51,7 @@ The graph below shows that, to a given concurrency factor (0.026 in this case), 
 
 ![Average time vs page size](charts/average_time_vs_page_size_within_concurrency_factor.png)
 
-The behavior at the graph's tail shows that from centain level of concurrency factor (~ 0.048) changes to Pages variable are more relevant to changing the response time than the concurrency factor.
+The behavior at the graph's tail shows that from certain level of concurrency factor (~ 0.048) changes to Pages variable are more relevant to changing the response time than the concurrency factor.
 
 ![Behavior at tail](charts/behavior_at_tail.png)
   
