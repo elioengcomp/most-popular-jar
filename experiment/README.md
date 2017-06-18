@@ -12,15 +12,15 @@ The scenarios are defined by the combination of three variables:
 
 - **Workers**: Max number of concurrent workers
 - **Threads**: Max number of threads for each worker
-- **Pages**: Number of items to be processed for each worker
+- **Page Size**: Number of items to be processed for each worker
 
 The possible values for each variable are:
 
 - **Workers**: 1, 2, 3, 5, 8, 13, 21
 - **Threads**: 1, 2, 3, 5, 8, 13, 21
-- **Pages**: 10, 20, 50, 100, 200, 500, 1000
+- **Page Size**: 10, 20, 50, 100, 200, 500, 1000
 
-A single scenario is identified by the label \<Workers>-\<Threads>-\<Pages>. For instance, the scenario 2-10-200 correspond to the scenario where the values of the variables Workers, Threads and Pages are 2, 10 and 200, respectively.
+A single scenario is identified by the label \<Workers>-\<Threads>-\<Page Size>. For instance, the scenario 2-10-200 correspond to the scenario where the values of the variables Workers, Threads and Page Size are 2, 10 and 200, respectively.
 
 Each scenario is executed 5 times.
 
@@ -45,13 +45,13 @@ The best variable values found to the given workload are:
 
 - **Workers**: 5
 - **Threads**: 21
-- **Page**: 100
+- **Page Size**: 100
 
-The graph below shows that, to a given concurrency factor (0.026 in this case), lower values of Pages seems to increase the response time due to the overhead of communication to fetch workload items.
+The graph below shows that, to a given concurrency factor (0.026 in this case), lower values of Page Size seems to increase the response time due to the overhead of communication to fetch workload items.
 
 ![Average time vs page size](charts/average_time_vs_page_size_within_concurrency_factor.png)
 
-The behavior at the graph's tail shows that from certain level of concurrency factor (~ 0.048) changes to Pages variable are more relevant to changing the response time than the concurrency factor.
+The behavior at the graph's tail shows that from certain level of concurrency factor (~ 0.048) changes to Page Size variable are more relevant to changing the response time than the concurrency factor.
 
 ![Behavior at tail](charts/behavior_at_tail.png)
   
