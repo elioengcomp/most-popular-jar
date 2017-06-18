@@ -102,9 +102,9 @@ public class ArtifactoryFacade {
             
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new WorkerException("Execution interrupted");
+            throw new ArtifactoryClientException("Execution interrupted");
         } catch (ExecutionException e) {
-            throw new WorkerException("Failed to get most popular jars", e);
+            throw new ArtifactoryClientException("Failed to get most popular jars", e);
         } finally {
             workersExecutor.shutdownNow();
         }
