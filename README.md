@@ -24,7 +24,7 @@ This java application search for the most popular Jar files inside an Artifactor
   - **-s,--size**: (Optional) Ranking size. Default: 2
   - **-w,--workers**: (Optional) Max number of concurrent workers. Default: 1
   - **-t,--threads**: (Optional) Max number of concurrent threads per worker. Default: 1  
-  - **-p,--page**: Page size per worker. Optional if authentication token provided has admin privileges. In this case, will use Artifactory instance `artifactory.search.userQueryLimit` property value.
+  - **-p,--page**: Page size per worker. Optional if authentication token provided has admin privileges. In this case, will use Artifactory instance `artifactory.search.userQueryLimit` configuration property value.
   
   
   
