@@ -13,11 +13,6 @@ public class RestClientException extends Exception{
         super();
     }
     
-    public RestClientException(int statusCode) {
-        this();
-        this.statusCode = statusCode;
-    }
-
     public RestClientException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
@@ -34,26 +29,11 @@ public class RestClientException extends Exception{
         super(cause);
     }
     
-    public RestClientException(int statusCode, String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        this(message, cause, enableSuppression, writableStackTrace);
-        this.statusCode = statusCode;
-    }
-
-    public RestClientException(int statusCode, String message, Throwable cause) {
-        this(message, cause);
-        this.statusCode = statusCode;
-    }
-
     public RestClientException(int statusCode, String message) {
-        this(message);
+        super(message);
         this.statusCode = statusCode;
     }
 
-    public RestClientException(int statusCode, Throwable cause) {
-        this(cause);
-        this.statusCode = statusCode;
-    }
-    
     public int getStatusCode() {
     
         return statusCode;
