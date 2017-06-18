@@ -3,7 +3,7 @@
 This java application search for the most popular Jar files inside an Artifactory maven repository.
 
 ## Repository
-[most-popular-jar](http://35.184.110.231:8083/artifactory/webapp/#/artifacts/browse/tree/Watch/release-local/marcolino/elio/most-popular-jar)
+[most-popular-jar](http://35.184.110.231:8083/artifactory/webapp/#/artifacts/browse/tree/General/release-local/marcolino/elio/most-popular-jar)
 
 ## Maven
 ```
