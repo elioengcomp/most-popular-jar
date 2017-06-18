@@ -26,16 +26,12 @@ import marcolino.elio.mpj.worker.dto.ArtifactDownloadCount;
 
 public class GetMostPopularArtifactsWorkerTest {
 
-    private static RestClient mockedRestClient;
+    private RestClient mockedRestClient;
     private ArtifactoryClient client;
-    
-    @BeforeClass
-    public static void initMock() throws RestClientException {
-        mockedRestClient = mock(RestClient.class);
-    }
     
     @Before
     public void initClient() {
+        mockedRestClient = mock(RestClient.class);
         client = new ArtifactoryClient(Constants.ARTIFACTORY_PATH, Constants.USER_TOKEN);
         client.setRestClient(mockedRestClient);
     }
@@ -67,6 +63,17 @@ public class GetMostPopularArtifactsWorkerTest {
         assertEquals(2, result.size());
         assertEquals(3, result.get(0).getDownloadCount().intValue());
         assertEquals(2, result.get(1).getDownloadCount().intValue());
+    }
+    
+    @Test(expected=WorkerException.class)
+    public void testError() throws Exception {
+        
+        List<Artifact> artifacts = createArtifactsList();
+        
+        when(mockedRestClient.request(eq(RestClient.Method.GET), startsWith("/api/storage/"), anyMap())).thenThrow(new RestClientException(404, "Not found!"));
+        
+        GetMostPopularArtifactsWorker worker = new GetMostPopularArtifactsWorker(1, client, artifacts, 2, 1);
+        worker.call(); 
     }
 
     
