@@ -33,7 +33,7 @@ Each scenario is executed 5 times.
 
 ## Usage
 
-To run the experiment execute the class `marcolino.elio.mpj.PerformanceExperiment`
+To run the experiment, execute the class `marcolino.elio.mpj.PerformanceExperiment`
 
 The results are automatically saved at `<USER_FOLDER>/mpj-experiment/`
 
