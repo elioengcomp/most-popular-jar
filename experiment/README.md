@@ -20,7 +20,7 @@ The possible values for each variable are:
 - **Threads**: 1, 2, 3, 5, 8, 13, 21
 - **Pages**: 10, 20, 50, 100, 200, 500, 1000
 
-A single scenario is identified by the label <Workers>-<Threads>-<Pages>. For instance, the scenario 2-10-200 correspond to the scenario where the values of the variables Workers, Threads and Pages are 2, 10 and 200, respectively.
+A single scenario is identified by the label \<Workers>-\<Threads>-\<Pages>. For instance, the scenario 2-10-200 correspond to the scenario where the values of the variables Workers, Threads and Pages are 2, 10 and 200, respectively.
 
 Each scenario is executed 5 times.
 
