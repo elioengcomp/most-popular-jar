@@ -142,7 +142,9 @@ public class CommandLineHandler {
     public static void main(String args[]) {
         CommandLineHandler handler = new CommandLineHandler(new HelpFormatter());
         int result = handler.execute(args);
-        System.exit(result);
+        if (result != 0) {
+            System.exit(result);
+        }
     }
     
     public String getUrl() {
