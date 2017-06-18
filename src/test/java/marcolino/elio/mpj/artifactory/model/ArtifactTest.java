@@ -1,4 +1,4 @@
-package marcolino.elio.mpj;
+package marcolino.elio.mpj.artifactory.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClient;
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClientException;
-import marcolino.elio.mpj.integration.artifactory.model.Artifact;
+import marcolino.elio.mpj.artifactory.ArtifactoryClient;
+import marcolino.elio.mpj.artifactory.ArtifactoryClientException;
+import marcolino.elio.mpj.artifactory.model.Artifact;
 
 
 public class ArtifactTest {

@@ -1,4 +1,4 @@
-package marcolino.elio.mpj;
+package marcolino.elio.mpj.artifactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -15,36 +15,31 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import marcolino.elio.mpj.integration.RestClient;
-import marcolino.elio.mpj.integration.RestClientException;
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClient;
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClientException;
-import marcolino.elio.mpj.integration.artifactory.model.Artifact;
-import marcolino.elio.mpj.integration.artifactory.model.ArtifactStats;
-import marcolino.elio.mpj.utils.Constants;
+import marcolino.elio.mpj.artifactory.model.Artifact;
+import marcolino.elio.mpj.artifactory.model.ArtifactStats;
+import marcolino.elio.mpj.rest.RestClient;
+import marcolino.elio.mpj.rest.RestClientException;
+import marcolino.elio.mpj.test.utils.Constants;
 
 
 public class ArtifactoryClientTest {
 
-    private static RestClient mockedRestClient;
+    private RestClient mockedRestClient;
     private ArtifactoryClient client;
     
-    @BeforeClass
-    public static void initMock() throws RestClientException {
+    @Before
+    public void initMock() throws RestClientException {
         mockedRestClient = mock(RestClient.class);
         
         String searchResponse = "{\"results\" : [ {  \"repo\" : \"libs-release-local\",  \"path\" : \"marcolino/elio/artifact/1.0.0\",  \"name\" : \"artifact-1.0.0.jar\",  \"type\" : \"file\",  \"size\" : 33189,  \"created\" : \"2015-05-26T18:15:54.880Z\",  \"created_by\" : \"eduardo\",  \"modified\" : \"2015-05-26T18:15:54.875Z\",  \"modified_by\" : \"eduardo\",  \"updated\" : \"2015-05-26T18:15:54.875Z\"}],\"range\" : {  \"start_pos\" : 0,  \"end_pos\" : 1,  \"total\" : 1}}";
-        when(mockedRestClient.request(eq(RestClient.Method.POST), eq("search/aql"), anyString(), anyString(), anyMap())).thenReturn(searchResponse);
+        when(mockedRestClient.request(eq(RestClient.Method.POST), eq("/api/search/aql"), anyString(), anyString(), anyMap())).thenReturn(searchResponse);
         
         String systemResponse = " SYSTEM INFORMATION DUMP  ======================= User Info ========================   user.country                                                          | US   user.dir                                                              | /var/opt/jfrog/artifactory   user.home                                                             | /var/opt/jfrog/artifactory   artifactory.search.userQueryLimit                                     | 1000 user.language                                                         | en   ";
-        when(mockedRestClient.request(eq(RestClient.Method.GET), eq("system"), anyMap())).thenReturn(systemResponse);
+        when(mockedRestClient.request(eq(RestClient.Method.GET), eq("/api/system"), anyMap())).thenReturn(systemResponse);
         
         String statsResponse = "{\"uri\" : \"https://artifactory.marcolino.com/artifactory/libs-release-local/marcolino/elio/artifact/1.0.0/artifact-1.0.0.jar\",  \"downloadCount\" : 4,  \"lastDownloaded\" : 1497276222083,  \"lastDownloadedBy\" : \"fernando\",  \"remoteDownloadCount\" : 0,  \"remoteLastDownloaded\" : 0}";
-        when(mockedRestClient.request(eq(RestClient.Method.GET), startsWith("storage/"), anyMap())).thenReturn(statsResponse);
-    }
-    
-    @Before
-    public void initClient() {
+        when(mockedRestClient.request(eq(RestClient.Method.GET), startsWith("/api/storage/"), anyMap())).thenReturn(statsResponse);
+
         client = new ArtifactoryClient(Constants.ARTIFACTORY_PATH, Constants.USER_TOKEN);
         client.setRestClient(mockedRestClient);
     }
@@ -90,6 +85,13 @@ public class ArtifactoryClientTest {
             e.printStackTrace();
             fail();
         }
+    }
+    
+    @Test(expected=ArtifactoryClientException.class)
+    public void testGetQueryResultsLimitPropertyNotFound() throws RestClientException, ArtifactoryClientException {
+        
+        when(mockedRestClient.request(eq(RestClient.Method.GET), eq("/api/system"), anyMap())).thenReturn("Something else not expected");
+        client.getQueryResultsLimit();
     }
     
     @Test

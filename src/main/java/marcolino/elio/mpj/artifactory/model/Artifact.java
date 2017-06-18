@@ -1,4 +1,4 @@
-package marcolino.elio.mpj.integration.artifactory.model;
+package marcolino.elio.mpj.artifactory.model;
 
 import org.json.JSONObject;
 
@@ -66,10 +66,4 @@ public class Artifact {
         return statsPath.toString();
     }
 
-    @Override
-    public String toString() {
-
-        return "Artifact [name=" + name + ", path=" + path + ", repo=" + repo + "]";
-    }
-    
 }

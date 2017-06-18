@@ -1,4 +1,4 @@
-package marcolino.elio.mpj;
+package marcolino.elio.mpj.artifactory.utils;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,12 +10,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import marcolino.elio.mpj.integration.RestClient;
-import marcolino.elio.mpj.integration.RestClientException;
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClient;
-import marcolino.elio.mpj.integration.artifactory.model.Artifact;
-import marcolino.elio.mpj.utils.ArtifactDownloadCountRanking;
-import marcolino.elio.mpj.utils.Constants;
+import marcolino.elio.mpj.artifactory.ArtifactoryClient;
+import marcolino.elio.mpj.artifactory.model.Artifact;
+import marcolino.elio.mpj.artifactory.utils.ArtifactDownloadCountRanking;
+import marcolino.elio.mpj.rest.RestClient;
+import marcolino.elio.mpj.rest.RestClientException;
+import marcolino.elio.mpj.test.utils.Constants;
 import marcolino.elio.mpj.worker.GetMostPopularArtifactsWorker;
 import marcolino.elio.mpj.worker.dto.ArtifactDownloadCount;
 

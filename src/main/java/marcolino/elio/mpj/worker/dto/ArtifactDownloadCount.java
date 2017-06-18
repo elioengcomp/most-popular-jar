@@ -1,6 +1,6 @@
 package marcolino.elio.mpj.worker.dto;
 
-import marcolino.elio.mpj.integration.artifactory.model.Artifact;
+import marcolino.elio.mpj.artifactory.model.Artifact;
 
 public class ArtifactDownloadCount {
 
@@ -33,10 +33,4 @@ public class ArtifactDownloadCount {
         this.downloadCount = downloadCount;
     }
 
-    @Override
-    public String toString() {
-
-        return "GetArtifactDownloadCountResult [artifact=" + artifact + ", downloadCount=" + downloadCount + "]";
-    }
-    
 }

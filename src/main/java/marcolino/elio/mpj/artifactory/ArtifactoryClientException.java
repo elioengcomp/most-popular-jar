@@ -1,4 +1,4 @@
-package marcolino.elio.mpj.integration.artifactory;
+package marcolino.elio.mpj.artifactory;
 
 /**
  * Exception thrown by the artifactory client

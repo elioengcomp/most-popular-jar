@@ -1,4 +1,4 @@
-package marcolino.elio.mpj.integration;
+package marcolino.elio.mpj.rest;
 
 import java.io.BufferedReader;
 import java.io.IOException;

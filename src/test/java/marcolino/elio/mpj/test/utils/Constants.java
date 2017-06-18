@@ -1,4 +1,4 @@
-package marcolino.elio.mpj.utils;
+package marcolino.elio.mpj.test.utils;
 
 
 public class Constants {

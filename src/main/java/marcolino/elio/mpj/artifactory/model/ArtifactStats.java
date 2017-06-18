@@ -1,4 +1,4 @@
-package marcolino.elio.mpj.integration.artifactory.model;
+package marcolino.elio.mpj.artifactory.model;
 
 import org.json.JSONObject;
 
@@ -16,6 +16,12 @@ public class ArtifactStats {
         super();
     }
     
+    public ArtifactStats(String uri, int downloadCount) {
+        super();
+        this.uri = uri;
+        this.downloadCount = downloadCount;
+    }
+
     public ArtifactStats(JSONObject json) {
         this.uri = json.getString("uri");
         this.downloadCount = json.getInt("downloadCount");
@@ -41,10 +47,4 @@ public class ArtifactStats {
         this.downloadCount = downloadCount;
     }
 
-    @Override
-    public String toString() {
-
-        return "ArtifactStats [uri=" + uri + ", downloadCount=" + downloadCount + "]";
-    }
-    
 }

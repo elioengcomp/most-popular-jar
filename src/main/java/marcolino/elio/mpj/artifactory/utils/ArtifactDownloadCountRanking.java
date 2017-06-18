@@ -1,4 +1,4 @@
-package marcolino.elio.mpj.utils;
+package marcolino.elio.mpj.artifactory.utils;
 
 import java.util.ArrayList;
 import java.util.List;

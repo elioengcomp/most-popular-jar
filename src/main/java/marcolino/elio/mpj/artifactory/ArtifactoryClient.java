@@ -1,4 +1,4 @@
-package marcolino.elio.mpj.integration.artifactory;
+package marcolino.elio.mpj.artifactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +11,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import marcolino.elio.mpj.integration.RestClient;
-import marcolino.elio.mpj.integration.RestClientException;
-import marcolino.elio.mpj.integration.artifactory.model.Artifact;
-import marcolino.elio.mpj.integration.artifactory.model.ArtifactStats;
+import marcolino.elio.mpj.artifactory.model.Artifact;
+import marcolino.elio.mpj.artifactory.model.ArtifactStats;
+import marcolino.elio.mpj.rest.RestClient;
+import marcolino.elio.mpj.rest.RestClientException;
 
 /**
  * This class implements methods of integration with Artifactory
@@ -65,7 +65,7 @@ public class ArtifactoryClient {
 
     private void createRestClient() {
 
-        this.restClient = new RestClient(this.artifactoryUrl + "/artifactory/api/");
+        this.restClient = new RestClient(this.artifactoryUrl);
     }
 
     public void setRestClient(RestClient restClient) {
@@ -132,7 +132,7 @@ public class ArtifactoryClient {
 
         try {
             // Make request
-            String response = restClient.request(RestClient.Method.POST, "search/aql", paginatedAql.toString(), "text/plain", authenticationHeader);
+            String response = restClient.request(RestClient.Method.POST, "/api/search/aql", paginatedAql.toString(), "text/plain", authenticationHeader);
 
             // Convert response to array of objects
             List<Artifact> result = new ArrayList<>();
@@ -158,7 +158,7 @@ public class ArtifactoryClient {
     public int getQueryResultsLimit() throws ArtifactoryClientException {
 
         try {
-            String response = restClient.request(RestClient.Method.GET, "system", authenticationHeader);
+            String response = restClient.request(RestClient.Method.GET, "/api/system", authenticationHeader);
 
             Pattern pattern = Pattern.compile("artifactory.search.userQueryLimit(\\s+)\\|\\s(\\d+)");
             Matcher matcher = pattern.matcher(response);
@@ -166,11 +166,10 @@ public class ArtifactoryClient {
             if (matcher.find()) {
                 return Integer.parseInt(matcher.group(2));
             } else {
-                // Fallback to default value
-                return 1000;
+                throw new ArtifactoryClientException("Property artifactory.search.userQueryLimit not found");
             }
         } catch (RestClientException e) {
-            throw new ArtifactoryClientException("Failed to get query results limit", e);
+            throw new ArtifactoryClientException("Failed to get query results limit: " + e.getMessage(), e);
         }
     }
 
@@ -191,16 +190,14 @@ public class ArtifactoryClient {
 
         // Configure path
         StringBuilder path = new StringBuilder();
-        path.append("storage/").append(artifact.getRepositoryPath()).append("?stats");
+        path.append("/api/storage/").append(artifact.getRepositoryPath()).append("?stats");
 
         try {
             // Make request
             String response = restClient.request(RestClient.Method.GET, path.toString(), authenticationHeader);
 
             // Convert response to model
-            ArtifactStats artifactStats = new ArtifactStats(new JSONObject(response));
-
-            return artifactStats;
+            return new ArtifactStats(new JSONObject(response));
 
         } catch (RestClientException e) {
             throw new ArtifactoryClientException("Failed to get artifact stats", e);

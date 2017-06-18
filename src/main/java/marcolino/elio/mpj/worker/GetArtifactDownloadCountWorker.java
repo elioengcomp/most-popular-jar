@@ -3,10 +3,10 @@ package marcolino.elio.mpj.worker;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClient;
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClientException;
-import marcolino.elio.mpj.integration.artifactory.model.Artifact;
-import marcolino.elio.mpj.integration.artifactory.model.ArtifactStats;
+import marcolino.elio.mpj.artifactory.ArtifactoryClient;
+import marcolino.elio.mpj.artifactory.ArtifactoryClientException;
+import marcolino.elio.mpj.artifactory.model.Artifact;
+import marcolino.elio.mpj.artifactory.model.ArtifactStats;
 import marcolino.elio.mpj.worker.dto.ArtifactDownloadCount;
 
 /**

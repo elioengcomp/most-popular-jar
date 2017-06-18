@@ -1,4 +1,4 @@
-package marcolino.elio.mpj.integration;
+package marcolino.elio.mpj.rest;
 
 /**
  * Exception thrown by a rest client request
@@ -52,6 +52,11 @@ public class RestClientException extends Exception{
     public RestClientException(int statusCode, Throwable cause) {
         this(cause);
         this.statusCode = statusCode;
+    }
+    
+    public int getStatusCode() {
+    
+        return statusCode;
     }
 
 }

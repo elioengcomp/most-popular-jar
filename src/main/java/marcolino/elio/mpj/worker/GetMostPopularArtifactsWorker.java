@@ -9,9 +9,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClient;
-import marcolino.elio.mpj.integration.artifactory.model.Artifact;
-import marcolino.elio.mpj.utils.ArtifactDownloadCountRanking;
+import marcolino.elio.mpj.artifactory.ArtifactoryClient;
+import marcolino.elio.mpj.artifactory.model.Artifact;
+import marcolino.elio.mpj.artifactory.utils.ArtifactDownloadCountRanking;
 import marcolino.elio.mpj.worker.dto.ArtifactDownloadCount;
 
 /**

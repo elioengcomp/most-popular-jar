@@ -1,4 +1,4 @@
-package marcolino.elio.mpj;
+package marcolino.elio.mpj.worker;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyMap;
@@ -11,11 +11,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import marcolino.elio.mpj.integration.RestClient;
-import marcolino.elio.mpj.integration.RestClientException;
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClient;
-import marcolino.elio.mpj.integration.artifactory.model.Artifact;
-import marcolino.elio.mpj.utils.Constants;
+import marcolino.elio.mpj.artifactory.ArtifactoryClient;
+import marcolino.elio.mpj.artifactory.model.Artifact;
+import marcolino.elio.mpj.rest.RestClient;
+import marcolino.elio.mpj.rest.RestClientException;
+import marcolino.elio.mpj.test.utils.Constants;
 import marcolino.elio.mpj.worker.GetArtifactDownloadCountWorker;
 import marcolino.elio.mpj.worker.dto.ArtifactDownloadCount;
 
@@ -29,8 +29,8 @@ public class GetArtifactDownloadCountWorkerTest {
     public static void initMock() throws RestClientException {
         mockedRestClient = mock(RestClient.class);
         
-        String statsResponse = "{\"uri\" : \"https://services.contabilizei.com/artifactory/libs-release-local/br/com/contabilizei/contabilizei-sso-client/1.3.2/contabilizei-sso-client-1.3.2.jar\",  \"downloadCount\" : 4,  \"lastDownloaded\" : 1497276222083,  \"lastDownloadedBy\" : \"fernando\",  \"remoteDownloadCount\" : 0,  \"remoteLastDownloaded\" : 0}";
-        when(mockedRestClient.request(eq(RestClient.Method.GET), startsWith("storage/"), anyMap())).thenReturn(statsResponse);
+        String statsResponse = "{\"uri\" : \"https://artifactory.marcolino.com/artifactory/repo-local/com/marcolino/artifact/1.0.0/artifact-1.0.0.jar\",  \"downloadCount\" : 4,  \"lastDownloaded\" : 1497276222083,  \"lastDownloadedBy\" : \"fernando\",  \"remoteDownloadCount\" : 0,  \"remoteLastDownloaded\" : 0}";
+        when(mockedRestClient.request(eq(RestClient.Method.GET), startsWith("/api/storage/"), anyMap())).thenReturn(statsResponse);
     }
     
     @Before
@@ -42,7 +42,7 @@ public class GetArtifactDownloadCountWorkerTest {
     @Test
     public void testWorker() throws Exception {
         
-        Artifact artifact = new Artifact("contabilizei-sso-client-1.3.2.jar", "br/com/contabilizei/contabilizei-sso-client/1.3.2", "libs-release-local");
+        Artifact artifact = new Artifact("artifact-1.0.0.jar", "com/marcolino/artifact/1.0.0", "repo-local");
         GetArtifactDownloadCountWorker worker = new GetArtifactDownloadCountWorker(client, artifact);
         ArtifactDownloadCount result = worker.call();
         assertEquals(artifact, result.getArtifact());

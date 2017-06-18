@@ -1,13 +1,13 @@
-package marcolino.elio.mpj;
+package marcolino.elio.mpj.rest;
 
 import static org.junit.Assert.*;
 
 import org.json.JSONObject;
 import org.junit.Test;
 
-import marcolino.elio.mpj.integration.RestClient;
-import marcolino.elio.mpj.integration.RestClientException;
-import marcolino.elio.mpj.utils.Constants;
+import marcolino.elio.mpj.rest.RestClient;
+import marcolino.elio.mpj.rest.RestClientException;
+import marcolino.elio.mpj.test.utils.Constants;
 
 
 public class RestClientTest {

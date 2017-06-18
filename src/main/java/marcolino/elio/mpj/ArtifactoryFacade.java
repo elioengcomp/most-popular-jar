@@ -6,11 +6,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClient;
-import marcolino.elio.mpj.integration.artifactory.ArtifactoryClientException;
-import marcolino.elio.mpj.integration.artifactory.model.Artifact;
-import marcolino.elio.mpj.utils.ArtifactDownloadCountRanking;
+import marcolino.elio.mpj.artifactory.ArtifactoryClient;
+import marcolino.elio.mpj.artifactory.ArtifactoryClientException;
+import marcolino.elio.mpj.artifactory.model.Artifact;
+import marcolino.elio.mpj.artifactory.utils.ArtifactDownloadCountRanking;
+import marcolino.elio.mpj.rest.RestClientException;
 import marcolino.elio.mpj.worker.GetMostPopularArtifactsWorker;
 import marcolino.elio.mpj.worker.WorkerException;
 import marcolino.elio.mpj.worker.dto.ArtifactDownloadCount;
@@ -21,6 +24,8 @@ import marcolino.elio.mpj.worker.dto.ArtifactDownloadCount;
  *
  */
 public class ArtifactoryFacade {
+    
+    private static final Logger logger = Logger.getLogger(ArtifactoryFacade.class.getName());
     
     private ArtifactoryClient client;
     
@@ -53,16 +58,24 @@ public class ArtifactoryFacade {
         // Artifactory query
         String aql = getListItemsFromRepoByNameQuery(repository, "*.jar");
         
-        try {
             
-            // Set number of items per page
-            int pageSize = 0;
-            if (itemsPerWorker != null && itemsPerWorker > 0) {
-                pageSize = itemsPerWorker;
-            } else {
+        // Set number of items per page
+        int pageSize = 0;
+        if (itemsPerWorker != null && itemsPerWorker > 0) {
+            pageSize = itemsPerWorker;
+        } else {
+            try {
                 pageSize = client.getQueryResultsLimit();
+            } catch (ArtifactoryClientException e) {
+                if (e.getCause() instanceof RestClientException && ((RestClientException) e.getCause()).getStatusCode() == 403) {
+                    throw new ArtifactoryClientException("Failed to get page size because auth token does not have admin privileges. Inform a value through parameters.", e);                    
+                } else {
+                    throw new ArtifactoryClientException("Failed to get page size: " + e.getMessage(), e);
+                }
             }
+        }
             
+        try {
             // Set current page result to page size so the query is performed at least one time
             int currentPageResults = pageSize;
             int currentPage = 0;
