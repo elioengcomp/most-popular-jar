@@ -26,7 +26,6 @@ Each scenario is executed 5 times.
 
 ## Execution Environment
 - CPU: Intel I7 7700K @ 4.20GHz
-- Memory: 16 GB DDR4
 - JDK: 1.8.0_121
 - Operational System: Ubuntu 16.10 yakkety 64 bits
 - Linux Kernel: 4.8.0-54-generic
