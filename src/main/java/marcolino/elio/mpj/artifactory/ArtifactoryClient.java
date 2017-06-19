@@ -72,6 +72,40 @@ public class ArtifactoryClient {
 
         this.restClient = restClient;
     }
+    
+    /**
+     * Execute query
+     * 
+     * @param aql
+     *            Query to be executed
+     * @return
+     * @throws ArtifactoryClientException
+     */
+    public List<Artifact> queryItems(String aql) throws ArtifactoryClientException {
+
+        //Validate arguments
+        if (StringUtils.isBlank(aql)) {
+            throw new ArtifactoryClientException("aql must be a non blank string");
+        }
+        
+        try {
+            // Make request
+            String response = restClient.request(RestClient.Method.POST, "/api/search/aql", aql, "text/plain", authenticationHeader);
+
+            // Convert response to array of objects
+            List<Artifact> result = new ArrayList<>();
+            JSONObject json = new JSONObject(response);
+            JSONArray results = json.getJSONArray("results");
+            for (int i = 0; i < results.length(); i++) {
+                result.add(new Artifact(results.getJSONObject(i)));
+            }
+
+            return result;
+
+        } catch (RestClientException e) {
+            throw new ArtifactoryClientException("Failed to execute query", e);
+        }
+    }
 
     /**
      * Execute paginated query
@@ -81,7 +115,7 @@ public class ArtifactoryClient {
      * @return
      * @throws ArtifactoryClientException
      */
-    public List<Artifact> queryItems(String aql) throws ArtifactoryClientException {
+    public List<Artifact> queryItemsPaginated(String aql) throws ArtifactoryClientException {
 
         //Validate arguments
         if (StringUtils.isBlank(aql)) {

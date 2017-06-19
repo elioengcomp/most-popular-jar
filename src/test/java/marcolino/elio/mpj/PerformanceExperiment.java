@@ -12,11 +12,11 @@ public class PerformanceExperiment {
     public static void main(String args[]) {
         
         // Configure Scenarios
-        int[] workers = new int[]{1,2,3,5,8,13,21};
-        int[] threads = new int[]{1,2,3,5,8,13,21};
-        int[] pages = new int[]{10,20,50,100,200,500,1000};
+        int[] workers = new int[]{5,8,13,21};
+        int[] threads = new int[]{5,8,13,21};
+        int[] pages = new int[]{10,20,50,100,200,500};
 
-        ArtifactoryClient client = new ArtifactoryClient("URL", "PASSWORD");
+        ArtifactoryClient client = new ArtifactoryClient("https://services.contabilizei.com/artifactory", "AKCp2WXgcVm7GSRfCbgjEpNet9hv5QiS6SSpr4di3MBBRL5BW9QdJeNNTdrYZogicNJ6rppm7");
         ArtifactoryFacade artifactory = new ArtifactoryFacade(client);
         
         StringBuilder results = new StringBuilder();
@@ -27,18 +27,21 @@ public class PerformanceExperiment {
         for (int worker : workers) {
             for (int thread : threads) {
                 for (int page : pages) {
-                    for (int i = 0; i < 5; i++) {
-                        
-                        System.out.println(String.format("Running experiment number %s for worker:%s thread:%s page:%s", i, worker, thread, page));
-                        
-                        try {
-                            long initialTime = System.currentTimeMillis();
-                            artifactory.getMostPopularJar("libs-release-local", 1, worker, thread, page);
-                            long time = System.currentTimeMillis() - initialTime;
-                            results.append(String.format("%s;%s;%s;%s", worker, thread, page, time)).append(System.lineSeparator());
-                        } catch (ArtifactoryClientException e) {
-                            e.printStackTrace();
-                            results.append(String.format("%s;%s;%s;%s", worker, thread, page, "erro: " + e.getMessage())).append(System.lineSeparator());
+                    System.gc();
+                    if (page > thread) {
+                        for (int i = 0; i < 5; i++) {
+                            
+                            System.out.println(String.format("Running experiment number %s for worker:%s thread:%s page:%s", i, worker, thread, page));
+                            
+                            try {
+                                long initialTime = System.currentTimeMillis();
+                                artifactory.getMostPopularJar("libs-release-local", 1, worker, thread, page);
+                                long time = System.currentTimeMillis() - initialTime;
+                                results.append(String.format("%s;%s;%s;%s", worker, thread, page, time)).append(System.lineSeparator());
+                            } catch (ArtifactoryClientException e) {
+                                e.printStackTrace();
+                                results.append(String.format("%s;%s;%s;%s", worker, thread, page, "erro: " + e.getMessage())).append(System.lineSeparator());
+                            }
                         }
                     }
                 }

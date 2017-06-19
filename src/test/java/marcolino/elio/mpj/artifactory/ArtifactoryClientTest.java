@@ -52,7 +52,7 @@ public class ArtifactoryClientTest {
     @Test
     public void testQueryItemsWithoutQuery() {
         try {
-            client.queryItems("");
+            client.queryItemsPaginated("");
             fail("Exception not caught");
         } catch (ArtifactoryClientException e) {
             assertEquals("aql must be a non blank string", e.getMessage());
@@ -68,7 +68,7 @@ public class ArtifactoryClientTest {
             aql.append("\"name\":{\"$match\":\"").append("*.jar").append("\"}");
             aql.append("})");
             
-            List<Artifact> artifacts = client.queryItems(aql.toString());
+            List<Artifact> artifacts = client.queryItemsPaginated(aql.toString());
             assertEquals(1, artifacts.size());
         } catch (ArtifactoryClientException e) {
             e.printStackTrace();

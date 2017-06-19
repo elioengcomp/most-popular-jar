@@ -35,6 +35,7 @@ public class ArtifactoryFacadeTest {
         
         when(mockedArtifactoryClient.getQueryResultsLimit()).thenReturn(1000);
         when(mockedArtifactoryClient.queryItemsPage(anyString(), anyInt(), anyInt())).thenReturn(artifacts);
+        when(mockedArtifactoryClient.queryItems(anyString())).thenReturn(artifacts);
         when(mockedArtifactoryClient.getArtifactStats(artifacts.get(0))).thenReturn(artifactStats.get(0));
         when(mockedArtifactoryClient.getArtifactStats(artifacts.get(1))).thenReturn(artifactStats.get(1));
         when(mockedArtifactoryClient.getArtifactStats(artifacts.get(2))).thenReturn(artifactStats.get(2));
@@ -67,18 +68,20 @@ public class ArtifactoryFacadeTest {
     }
     
     
-    @Test
+    @Test(expected=IllegalArgumentException.class)
     public void testGetMostPopularJarWithNoPageSize() throws ArtifactoryClientException {
         
         ArtifactoryFacade facade = new ArtifactoryFacade(mockedArtifactoryClient);
         
-        List<ArtifactDownloadCount> result = facade.getMostPopularJar("libs-release-local", 2, 1, 1, 0);
+        facade.getMostPopularJar("libs-release-local", 2, 1, 1, null);
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testGetMostPopularJarWithPageSizeZero() throws ArtifactoryClientException {
         
-        assertEquals("Ranking size", 2, result.size());
-        assertEquals("First place download count", 3, result.get(0).getDownloadCount().intValue());
-        assertEquals("Second place download count", 2, result.get(1).getDownloadCount().intValue());
-        assertEquals("First place artifact", "artifact-3.0.0.jar", result.get(0).getArtifact().getName());
-        assertEquals("Second place artifact", "artifact-2.0.0.jar", result.get(1).getArtifact().getName());
+        ArtifactoryFacade facade = new ArtifactoryFacade(mockedArtifactoryClient);
+        
+        facade.getMostPopularJar("libs-release-local", 2, 1, 1, 0);
     }
     
     @Test
@@ -93,41 +96,6 @@ public class ArtifactoryFacadeTest {
         assertEquals("Second place download count", 2, result.get(1).getDownloadCount().intValue());
         assertEquals("First place artifact", "artifact-3.0.0.jar", result.get(0).getArtifact().getName());
         assertEquals("Second place artifact", "artifact-2.0.0.jar", result.get(1).getArtifact().getName());
-    }
-    
-    @Test
-    public void testGetMostPopularJarWithNoPageSizeAndNoAdminPrivileges() throws ArtifactoryClientException {
-        
-        when(mockedArtifactoryClient.getQueryResultsLimit()).thenThrow(new ArtifactoryClientException("Any message", new RestClientException(403, "Not allowed")));
-        
-        ArtifactoryFacade facade = new ArtifactoryFacade(mockedArtifactoryClient);        
-        try {
-            facade.getMostPopularJar("libs-release-local", 2, 1, 1, 0);
-            fail("Exception not thrown");
-        } catch(ArtifactoryClientException e) {
-            assertEquals("Failed to get page size because auth token does not have admin privileges. Inform a value through parameters.", e.getMessage());
-            return;
-        }
-        fail("Something else happen");
-    }
-    
-    @Test
-    public void testGetMostPopularJarWithNoPageSizeUnkownReason() throws ArtifactoryClientException {
-        
-        when(mockedArtifactoryClient.getQueryResultsLimit()).thenThrow(new ArtifactoryClientException("Any message"));
-        
-        ArtifactoryFacade facade = new ArtifactoryFacade(mockedArtifactoryClient);        
-        try {
-            facade.getMostPopularJar("libs-release-local", 2, 1, 1, 0);
-            fail("Exception not thrown");
-        } catch(ArtifactoryClientException e) {
-            String exceptionMessagePrefix = "Failed to get page size";
-            if(!e.getMessage().startsWith(exceptionMessagePrefix)) {
-                fail("Exception message should starts with: " + exceptionMessagePrefix);
-            }
-            return;
-        }
-        fail("Something else happen");
     }
     
 }

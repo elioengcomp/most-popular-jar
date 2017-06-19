@@ -45,11 +45,16 @@ public class ArtifactoryFacade {
      * @param threadsPerWorker
      *                  max number of threads per worker
      * @param itemsPerWorker
-     *                  number of items to be processed per each worker. Default: artifactory.search.userQueryLimit 
+     *                  number of items to be processed per each worker 
      * @return list of the most downloaded jar files inside the repository
      * @throws ArtifactoryClientException
      */
     public List<ArtifactDownloadCount> getMostPopularJar(String repository, int rankingSize, int maxConcurrentWorkers, int threadsPerWorker, Integer itemsPerWorker) throws ArtifactoryClientException {
+        
+        //Validate arguments
+        if (itemsPerWorker == null || itemsPerWorker < 1) {
+            throw new IllegalArgumentException("ItemsPerWorker must be a positive integer");
+        }
         
         List<Future<List<ArtifactDownloadCount>>> workersFuture = new ArrayList<>();
         ExecutorService workersExecutor = Executors.newFixedThreadPool(maxConcurrentWorkers);
@@ -58,41 +63,28 @@ public class ArtifactoryFacade {
         // Artifactory query
         String aql = getListItemsFromRepoByNameQuery(repository, "*.jar");
         
-            
-        // Set number of items per page
-        int pageSize = 0;
-        if (itemsPerWorker != null && itemsPerWorker > 0) {
-            pageSize = itemsPerWorker;
-        } else {
-            try {
-                pageSize = client.getQueryResultsLimit();
-            } catch (ArtifactoryClientException e) {
-                if (e.getCause() instanceof RestClientException && ((RestClientException) e.getCause()).getStatusCode() == 403) {
-                    throw new ArtifactoryClientException("Failed to get page size because auth token does not have admin privileges. Inform a value through parameters.", e);                    
-                } else {
-                    throw new ArtifactoryClientException("Failed to get page size: " + e.getMessage(), e);
-                }
-            }
-        }
-            
         try {
-            // Set current page result to page size so the query is performed at least one time
-            int currentPageResults = pageSize;
-            int currentPage = 0;
-    
-            // Query pages until the number of results is lesser than page size
-            while (currentPageResults == pageSize) {
-                List<Artifact> pageResults = client.queryItemsPage(aql, currentPage * pageSize, pageSize);            
-                currentPageResults = pageResults.size();
-                currentPage++;
-                
-                //Submit results to processing
-                if (!pageResults.isEmpty()) {
-                    GetMostPopularArtifactsWorker worker = new GetMostPopularArtifactsWorker(currentPage, client, pageResults, rankingSize, threadsPerWorker);                
-                    workersFuture.add(workersExecutor.submit(worker));
-                }
-            }
             
+            // Query items
+            List<Artifact> results = client.queryItems(aql);            
+            
+            // Distribute work load between workers accordingly to itemsPerWorker value  
+            int listWorkerInitIndex = 0;
+            int workersCounter = 0;
+            while(listWorkerInitIndex < results.size()) {
+                
+                int listWorkerFinalIndex = listWorkerInitIndex + itemsPerWorker;
+                if (listWorkerFinalIndex > results.size()) {
+                    listWorkerFinalIndex = results.size();
+                }
+                
+                List<Artifact> workerList = results.subList(listWorkerInitIndex, listWorkerFinalIndex);
+                GetMostPopularArtifactsWorker worker = new GetMostPopularArtifactsWorker(workersCounter + 1, client, workerList, rankingSize, threadsPerWorker);                
+                workersFuture.add(workersExecutor.submit(worker));
+                
+                listWorkerInitIndex += itemsPerWorker;
+                workersCounter++;
+            }
         
             // Keep ranking updated
             for (int i = 0; i < workersFuture.size(); i++) {
