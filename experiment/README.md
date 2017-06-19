@@ -26,7 +26,6 @@ Each scenario is executed 5 times.
 
 ## Execution Environment
 - CPU: Intel I7 7700K @ 4.20GHz
-- Memory: 16 GB DDR4
 - JDK: 1.8.0_121
 - Operational System: Ubuntu 16.10 yakkety 64 bits
 - Linux Kernel: 4.8.0-54-generic
@@ -47,11 +46,14 @@ The best variable values found to the given workload are:
 - **Threads**: 21
 - **Page Size**: 100
 
-The graph below shows that, to a given concurrency factor (0.026 in this case), lower values of Page Size seems to increase the response time due to the overhead of communication to fetch workload items.
+The graph below shows that at a given concurrency factor value, in this case 0.026, lower values of Page Size are associated with higher response time values.
 
 ![Average time vs page size](charts/average_time_vs_page_size_within_concurrency_factor.png)
 
 The behavior at the graph's tail shows that from certain level of concurrency factor (~ 0.048) changes to Page Size variable are more relevant to changing the response time than the concurrency factor.
 
 ![Behavior at tail](charts/behavior_at_tail.png)
-  
+
+## Full Experiment Data
+
+[Google Drive](https://docs.google.com/spreadsheets/d/1ZoQ-0kUEQC-yuJH6q9oPA_8jmsxGEvWpLf6Je9k-JJQ/edit?usp=sharing)
