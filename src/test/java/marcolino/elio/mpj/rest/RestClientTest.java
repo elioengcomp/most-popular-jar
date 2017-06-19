@@ -1,12 +1,14 @@
 package marcolino.elio.mpj.rest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.junit.Test;
 
-import marcolino.elio.mpj.rest.RestClient;
-import marcolino.elio.mpj.rest.RestClientException;
 import marcolino.elio.mpj.test.utils.Constants;
 
 
@@ -92,6 +94,23 @@ public class RestClientTest {
             assertEquals(1, json.get("userId"));
             assertEquals(101, json.get("id"));
             assertEquals("test", json.get("title"));
+        } catch (RestClientException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+    
+    @Test
+    public void testSuccessfulGetRequestWithCustomHeaders() {
+        RestClient client = new RestClient(Constants.JSONPLACEHOLDER_URL);
+        try {
+            Map<String, String> headers = new HashMap<>();
+            headers.put("X-Header", "value");
+            String response = client.request(RestClient.Method.GET, "/posts/1", headers);
+            JSONObject json = new JSONObject(response);
+            assertEquals(1, json.get("userId"));
+            assertEquals(1, json.get("id"));
+            assertEquals("sunt aut facere repellat provident occaecati excepturi optio reprehenderit", json.get("title"));
         } catch (RestClientException e) {
             e.printStackTrace();
             fail();
