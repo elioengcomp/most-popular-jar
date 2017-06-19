@@ -16,7 +16,7 @@ public class PerformanceExperiment {
         int[] threads = new int[]{1,2,3,5,8,13,21};
         int[] pages = new int[]{10,20,50,100,200,500,1000};
 
-        ArtifactoryClient client = new ArtifactoryClient("https://services.contabilizei.com/artifactory", "AKCp2WXgcVm7GSRfCbgjEpNet9hv5QiS6SSpr4di3MBBRL5BW9QdJeNNTdrYZogicNJ6rppm7");
+        ArtifactoryClient client = new ArtifactoryClient("URL", "PASSWORD");
         ArtifactoryFacade artifactory = new ArtifactoryFacade(client);
         
         StringBuilder results = new StringBuilder();
