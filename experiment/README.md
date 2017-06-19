@@ -46,7 +46,7 @@ The best variable values found to the given workload are:
 - **Threads**: 21
 - **Page Size**: 100
 
-The graph below shows that, to a given concurrency factor (0.026 in this case), low values of Page Size seems to increase the response time.
+The graph below shows that at a given concurrency factor value, in this case 0.026, lower values of Page Size are associated with higher response time values.
 
 ![Average time vs page size](charts/average_time_vs_page_size_within_concurrency_factor.png)
 
