@@ -1,6 +1,7 @@
 package marcolino.elio.mpj.artifactory;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -12,7 +13,6 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import marcolino.elio.mpj.artifactory.model.Artifact;
@@ -76,6 +76,20 @@ public class ArtifactoryClientTest {
         }
     }
     
+    @Test(expected=ArtifactoryClientException.class)
+    public void testQueryItemsError() throws RestClientException, ArtifactoryClientException {
+        
+        when(mockedRestClient.request(eq(RestClient.Method.POST), eq("/api/search/aql"), anyString(), anyString(), anyMap())).thenThrow(new RestClientException(404, "Not found!"));
+        
+        StringBuilder aql = new StringBuilder();
+        aql.append("items.find({");
+        aql.append("\"repo\":{\"$eq\":\"").append(Constants.REPOSITORY).append("\"},");
+        aql.append("\"name\":{\"$match\":\"").append("*.jar").append("\"}");
+        aql.append("})");
+        
+        client.queryItems(aql.toString());
+    }
+    
     @Test
     public void testGetQueryResultsLimit() {
         try {
@@ -88,8 +102,13 @@ public class ArtifactoryClientTest {
     }
     
     @Test(expected=ArtifactoryClientException.class)
+    public void testGetQueryResultsLimitError() throws RestClientException, ArtifactoryClientException {
+        when(mockedRestClient.request(eq(RestClient.Method.GET), eq("/api/system"), anyMap())).thenThrow(new RestClientException(404, "Not found!"));
+        client.getQueryResultsLimit();  
+    }
+    
+    @Test(expected=ArtifactoryClientException.class)
     public void testGetQueryResultsLimitPropertyNotFound() throws RestClientException, ArtifactoryClientException {
-        
         when(mockedRestClient.request(eq(RestClient.Method.GET), eq("/api/system"), anyMap())).thenReturn("Something else not expected");
         client.getQueryResultsLimit();
     }
@@ -114,6 +133,19 @@ public class ArtifactoryClientTest {
             e.printStackTrace();
             fail();
         }
+    }
+    
+    @Test(expected=ArtifactoryClientException.class)
+    public void testGetArtifactStatsError() throws RestClientException, ArtifactoryClientException {
+        when(mockedRestClient.request(eq(RestClient.Method.GET), startsWith("/api/storage/"), anyMap())).thenThrow(new RestClientException(404, "Not found!"));
+        Artifact artifact = new Artifact("artifact-1.0.0.jar", "marcolino/elio/artifact/1.0.0", "libs-release-local");
+        client.getArtifactStats(artifact); 
+    }
+    
+    @Test
+    public void testCreateClientWithoutAuthentication() {
+        ArtifactoryClient client = new ArtifactoryClient(Constants.ARTIFACTORY_PATH, null);
+        assertNull(client.getAuthenticationHeader());
     }
     
     

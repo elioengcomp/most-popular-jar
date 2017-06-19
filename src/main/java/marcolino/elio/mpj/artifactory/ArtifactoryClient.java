@@ -204,5 +204,10 @@ public class ArtifactoryClient {
         }
 
     }
+    
+    public Map<String, String> getAuthenticationHeader() {
+    
+        return authenticationHeader;
+    }
 
 }
