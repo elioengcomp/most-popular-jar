@@ -38,7 +38,7 @@ The results are automatically saved at `<USER_FOLDER>/mpj-experiment/`
 
 ## Results
 
-![Average time vs concurrency factor](charts/average_time_vs_concurrency_factor.png)
+![Average time vs concurrency factor](charts/median_time_vs_concurrency_factor.png)
 
 The best variable values found to the given workload are:
 
@@ -48,7 +48,7 @@ The best variable values found to the given workload are:
 
 The graph below shows that at a given concurrency factor value, in this case 0.026, lower values of Page Size are associated with higher response time values.
 
-![Average time vs page size](charts/average_time_vs_page_size_within_concurrency_factor.png)
+![Average time vs page size](charts/median_time_vs_page_size_within_concurrency_factor.png)
 
 The behavior at the graph's tail shows that from certain level of concurrency factor (~ 0.048) changes to Page Size variable are more relevant to changing the response time than the concurrency factor.
 
