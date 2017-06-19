@@ -2,29 +2,56 @@
 
 Experiment to identify the behavior of the application to different execution arguments
 
-## Environment
+## Workload Description
 
+The experimental workload consists in searching for the most popular jar file inside an Artifacotry repository containing 1087 items out of which 505 are Jar files.
 
-## Maven
-```
-<dependency>
-  <groupId>marcolino.elio</groupId>
-  <artifactId>most-popular-jar</artifactId>
-  <version>${version}</version>
-</dependency>
-```
+## Execution scenarios
 
-## Standalone Usage
+The scenarios are defined by the combination of three variables:
 
-- **MainClass**: [marcolino.elio.mpj.CommandLineHandler](https://github.com/elioengcomp/most-popular-jar/blob/master/src/main/java/marcolino/elio/mpj/CommandLineHandler.java)
-- **Command line arguments**:
-  - **-u,--url**: Artifactory url in format _http|s://host:port/artifactory_
-  - **-a,--auth**: Artifactory authentication token
-  - **-r,--repo**: Repository to search for the most popular jar files 
-  - **-s,--size**: (Optional) Ranking size. Default: 2
-  - **-w,--workers**: (Optional) Max number of concurrent workers. Default: 1
-  - **-t,--threads**: (Optional) Max number of concurrent threads per worker. Default: 1  
-  - **-p,--page**: Page size per worker. Optional if authentication token provided has admin privileges. In this case, will use Artifactory instance `artifactory.search.userQueryLimit` configuration property value.
-  
-  
+- **Workers**: Max number of concurrent workers
+- **Threads**: Max number of threads for each worker
+- **Page Size**: Number of items to be processed for each worker
+
+The possible values for each variable are:
+
+- **Workers**: 1, 2, 3, 5, 8, 13, 21
+- **Threads**: 1, 2, 3, 5, 8, 13, 21
+- **Page Size**: 10, 20, 50, 100, 200, 500, 1000
+
+A single scenario is identified by the label \<Workers>-\<Threads>-\<Page Size>. For instance, the scenario 2-10-200 correspond to the scenario where the values of the variables Workers, Threads and Page Size are 2, 10 and 200, respectively.
+
+Each scenario is executed 5 times.
+
+## Execution Environment
+- CPU: Intel I7 7700K @ 4.20GHz
+- Memory: 16 GB DDR4
+- JDK: 1.8.0_121
+- Operational System: Ubuntu 16.10 yakkety 64 bits
+- Linux Kernel: 4.8.0-54-generic
+
+## Usage
+
+To run the experiment, execute the class `marcolino.elio.mpj.PerformanceExperiment`
+
+The results are automatically saved at `<USER_FOLDER>/mpj-experiment/`
+
+## Results
+
+![Average time vs concurrency factor](charts/average_time_vs_concurrency_factor.png)
+
+The best variable values found to the given workload are:
+
+- **Workers**: 5
+- **Threads**: 21
+- **Page Size**: 100
+
+The graph below shows that, to a given concurrency factor (0.026 in this case), lower values of Page Size seems to increase the response time due to the overhead of communication to fetch workload items.
+
+![Average time vs page size](charts/average_time_vs_page_size_within_concurrency_factor.png)
+
+The behavior at the graph's tail shows that from certain level of concurrency factor (~ 0.048) changes to Page Size variable are more relevant to changing the response time than the concurrency factor.
+
+![Behavior at tail](charts/behavior_at_tail.png)
   
