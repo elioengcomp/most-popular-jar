@@ -75,7 +75,18 @@ public class GetMostPopularArtifactsWorkerTest {
         GetMostPopularArtifactsWorker worker = new GetMostPopularArtifactsWorker(1, client, artifacts, 2, 1);
         worker.call(); 
     }
-
     
+    @Test
+    public void testLogProgress() throws Exception {
+        
+        List<Artifact> artifacts = createArtifactsList();
+        
+        GetMostPopularArtifactsWorker worker = new GetMostPopularArtifactsWorker(1, client, artifacts, 2, 1);
+        worker.logProgress(0, 1000);
+        worker.logProgress(1, 1000);
+        worker.logProgress(100, 1000);
+        worker.logProgress(1000, 1000);
+        worker.logProgress(1001, 1000);
+    }
     
 }

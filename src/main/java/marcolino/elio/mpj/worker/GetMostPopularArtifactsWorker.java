@@ -95,7 +95,7 @@ public class GetMostPopularArtifactsWorker implements Callable<List<ArtifactDown
         return ranking.getRanking();
     }
     
-    private void logProgress(int index, int workSize) {
+    public void logProgress(int index, int workSize) {
         if(index % 100 == 0) {
             logger.info(String.format("%s - %s/%s %s", workerId, index, workSize, "artifacts processed"));
         }        
