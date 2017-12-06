@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.marcolino.elio</groupId>
 	<artifactId>most-popular-jar</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 
 	<name>most-popular-jar</name>
 	<description>Find First And Second Most Popular Jar File</description>
@@ -42,7 +42,6 @@
             <version>2.8.9</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
 	<build>
@@ -55,6 +54,19 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
