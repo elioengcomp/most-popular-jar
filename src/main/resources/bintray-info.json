@@ -1,0 +1,21 @@
+{
+    "package": {
+        "user_org": "eliom-org-test",
+        "repo": "maven-test",
+        "group": "org.marcolino.elio",
+        "name": "org.marcolino.elio.most-popular-jar",
+        "desc": "Most Popular Jar",
+        "licenses": ["Apache-2.0"],
+        "website_url": "https://github.com/elioengcomp/most-popular-jar",
+        "issue_tracker_url": "",
+        "vcs_url": "https://github.com/elioengcomp/most-popular-jar",
+        "labels": ["test", "jfrog", "ojo"],
+        "public_download_numbers": true
+    },
+    "version": {
+        "name": "1.0.1-SNAPSHOT",
+        "desc": "Most Popular Jar",
+        "gpgSign": false
+    },
+    "publish": true
+}
