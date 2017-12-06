@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.patbat</groupId>
-	<artifactId>promotest</artifactId>
+	<groupId>org.marcolino.elio</groupId>
+	<artifactId>most-popular-jar</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 
 	<name>most-popular-jar</name>
