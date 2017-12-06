@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.patbat</groupId>
 	<artifactId>promotest</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>most-popular-jar</name>
 	<description>Find First And Second Most Popular Jar File</description>
